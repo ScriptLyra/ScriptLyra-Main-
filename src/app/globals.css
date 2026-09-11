@@ -1,0 +1,819 @@
+@import "tailwindcss";
+
+/* ==========================================================================
+   ScriptLyra — design tokens
+   The palette is fixed by the brand: ink, paper, and three greys between them.
+   There is no accent colour. The loudest move available is inversion, so it is
+   rationed: only the closing passage of a page goes to ink.
+   ========================================================================== */
+
+@theme {
+  --color-ink: #000000;
+  --color-paper: #ffffff;
+  --color-leaf: #f7f7f5;
+  --color-graphite: #8a8a8a;
+  --color-rule: #eaeaea;
+
+  --font-display: var(--font-instrument-serif), "Instrument Serif", Georgia,
+    "Times New Roman", serif;
+  --font-sans: var(--font-inter), "Inter", -apple-system, BlinkMacSystemFont,
+    "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+:root {
+  /* One easing carries the whole site. Long, decelerating, no overshoot. */
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --shell-pad: clamp(1.25rem, 5vw, 5rem);
+  --nav-h: 4.5rem;
+}
+
+/* --------------------------------------------------------------------------
+   Base
+   -------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* No `scroll-behavior: smooth` here — the momentum scroller owns scrolling,
+       and the two fight each other. */
+    text-rendering: optimizeLegibility;
+  }
+
+  body {
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    /* `clip` rather than `hidden`: it stops sideways overflow without turning
+       the body into a scroll container, which would break sticky sections. */
+    overflow-x: clip;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+  }
+
+  ::selection {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-ink);
+    outline-offset: 4px;
+    border-radius: 1px;
+  }
+
+  /* Type is set in ink, so focus rings invert inside ink passages. */
+  .on-ink :focus-visible {
+    outline-color: var(--color-paper);
+  }
+
+  ::placeholder {
+    color: var(--color-graphite);
+    opacity: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Skip link
+   Off-screen until tabbed to, then a small paper card over the navbar. Sits
+   above everything, including the loading sequence.
+   -------------------------------------------------------------------------- */
+@layer components {
+  .skip-link {
+    position: fixed;
+    top: 0.75rem;
+    left: 0.75rem;
+    z-index: 110;
+    transform: translateY(-200%);
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    border: 1px solid var(--color-ink);
+    padding: 0.625rem 1.125rem;
+    font-size: 0.8125rem;
+    letter-spacing: 0.01em;
+    transition: transform 260ms var(--ease-premium);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+    outline-offset: 3px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Typography
+   Instrument Serif does the talking. Inter is kept small, quiet and
+   subordinate: it labels, it never declaims.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .t-display-xl {
+    font-family: var(--font-display);
+    font-size: clamp(3.25rem, 10.4vw, 9.5rem);
+    line-height: 0.9;
+    letter-spacing: -0.028em;
+    font-weight: 400;
+  }
+
+  .t-display-l {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6.2vw, 5.5rem);
+    line-height: 0.94;
+    letter-spacing: -0.024em;
+    font-weight: 400;
+  }
+
+  .t-display-m {
+    font-family: var(--font-display);
+    font-size: clamp(1.875rem, 3.4vw, 3rem);
+    line-height: 1.02;
+    letter-spacing: -0.016em;
+    font-weight: 400;
+  }
+
+  .t-display-s {
+    font-family: var(--font-display);
+    font-size: clamp(1.375rem, 2vw, 1.9rem);
+    line-height: 1.14;
+    letter-spacing: -0.012em;
+    font-weight: 400;
+  }
+
+  .t-lead {
+    font-family: var(--font-sans);
+    font-size: clamp(1.0625rem, 1.2vw, 1.3125rem);
+    line-height: 1.55;
+    letter-spacing: -0.005em;
+    max-width: 34ch;
+  }
+
+  .t-body {
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.75;
+    letter-spacing: -0.002em;
+    max-width: 62ch;
+  }
+
+  .t-body-serif {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+    line-height: 1.62;
+    max-width: 68ch;
+  }
+
+  /* Running head + catalogue numeral, set the way a book sets a folio:
+     serif, tabular figures, sentence case. Never a tracked-out capital label. */
+  .t-folio {
+    font-family: var(--font-display);
+    font-size: 0.875rem;
+    line-height: 1;
+    letter-spacing: 0.005em;
+    font-variant-numeric: tabular-nums lining-nums;
+    color: var(--color-graphite);
+  }
+
+  .t-micro {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    letter-spacing: -0.001em;
+    color: var(--color-graphite);
+  }
+
+  .t-numeral {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums lining-nums;
+    letter-spacing: -0.01em;
+  }
+
+  .t-quote {
+    font-family: var(--font-display);
+    font-style: italic;
+    letter-spacing: -0.012em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Materials
+   Paper is a material here, not a background colour: a fine speckle keeps the
+   whites from reading as flat screen-white. Ink passages get a lighter grain
+   so they read as printed rather than as a dark UI theme.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .grain-paper,
+  .grain-ink {
+    position: relative;
+  }
+
+  .grain-paper::before,
+  .grain-ink::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background-repeat: repeat;
+    background-size: 110px 110px;
+    z-index: 0;
+  }
+
+  .grain-paper::before {
+    background-image: url("/brand/grain.png");
+    opacity: 0.55;
+  }
+
+  .grain-ink::before {
+    background-image: url("/brand/grain-light.png");
+    opacity: 0.28;
+  }
+
+  /* Anything that must sit above the speckle. */
+  .above-grain {
+    position: relative;
+    z-index: 1;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Structure
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 92rem;
+    margin-inline: auto;
+    padding-inline: var(--shell-pad);
+  }
+
+  /* A hairline that fades out at both ends — a crease in a folded sheet
+     rather than a ruled newspaper column. */
+  .crease {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-rule) 9%,
+      var(--color-rule) 91%,
+      transparent 100%
+    );
+  }
+
+  .crease-ink {
+    height: 1px;
+    border: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.22) 9%,
+      rgba(255, 255, 255, 0.22) 91%,
+      transparent 100%
+    );
+  }
+
+  /* The margin rule that runs down the outer edge of a set page. */
+  .margin-rule {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(
+      180deg,
+      transparent,
+      var(--color-rule) 12%,
+      var(--color-rule) 88%,
+      transparent
+    );
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Interaction
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  /* Links draw their underline on rather than switching it on. */
+  .link-rule {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 calc(100% - 1px);
+    background-repeat: no-repeat;
+    transition: background-size 0.55s var(--ease-premium);
+    padding-bottom: 2px;
+  }
+
+  .link-rule:hover,
+  .link-rule:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* Buttons invert instead of tinting: the ink drains away and leaves paper. */
+  .btn {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 1rem 1.6rem;
+    border: 1px solid var(--color-ink);
+    border-radius: 2px;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+    letter-spacing: -0.004em;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.5s var(--ease-premium);
+  }
+
+  .btn::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    z-index: -1;
+    transform: scaleY(1);
+    transform-origin: bottom;
+    transition: transform 0.6s var(--ease-premium);
+  }
+
+  .btn-ink {
+    color: var(--color-paper);
+  }
+  .btn-ink::before {
+    background: var(--color-ink);
+  }
+  .btn-ink:hover,
+  .btn-ink:focus-visible {
+    color: var(--color-ink);
+  }
+  .btn-ink:hover::before,
+  .btn-ink:focus-visible::before {
+    transform: scaleY(0);
+  }
+
+  .btn-paper {
+    color: var(--color-ink);
+    border-color: var(--color-paper);
+  }
+  .btn-paper::before {
+    background: var(--color-paper);
+  }
+  .btn-paper:hover,
+  .btn-paper:focus-visible {
+    color: var(--color-paper);
+  }
+  .btn-paper:hover::before,
+  .btn-paper:focus-visible::before {
+    transform: scaleY(0);
+  }
+
+  .btn-outline {
+    color: var(--color-ink);
+  }
+  .btn-outline::before {
+    background: var(--color-ink);
+    transform: scaleY(0);
+  }
+  .btn-outline:hover,
+  .btn-outline:focus-visible {
+    color: var(--color-paper);
+  }
+  .btn-outline:hover::before,
+  .btn-outline:focus-visible::before {
+    transform: scaleY(1);
+  }
+
+  .btn-arrow {
+    transition: transform 0.6s var(--ease-premium);
+  }
+  .btn:hover .btn-arrow,
+  .btn:focus-visible .btn-arrow {
+    transform: translateX(4px);
+  }
+
+  /* The ring cursor only exists over the few surfaces that invite handling,
+     so the native cursor is hidden there and nowhere else. */
+  .has-ring-cursor [data-ring] {
+    cursor: none;
+  }
+
+  .field {
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid var(--color-rule);
+    background: transparent;
+    padding: 0.85rem 0;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    color: var(--color-ink);
+    border-radius: 0;
+    transition: border-color 0.45s var(--ease-premium);
+  }
+
+  .field:hover {
+    border-bottom-color: var(--color-graphite);
+  }
+
+  .field:focus {
+    outline: none;
+    border-bottom-color: var(--color-ink);
+  }
+
+  .field-label {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    color: var(--color-graphite);
+    letter-spacing: -0.001em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Book covers
+   Each cover on the list is its own typographic design, the way a real
+   publisher's covers are. These are the shared mechanics only.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .cover {
+    position: relative;
+    aspect-ratio: 2 / 3;
+    overflow: hidden;
+    border-radius: 1px;
+    isolation: isolate;
+    /* Covers are typeset in container units, so one design holds together at
+       thumbnail size and at half a screen tall. */
+    container-type: inline-size;
+  }
+
+  /* A book sitting on a page has weight. Reserved for covers shown at scale. */
+  .cover-lifted {
+    box-shadow: 0 34px 70px -34px rgba(0, 0, 0, 0.3);
+  }
+
+  /* Covers in a list take a slight turn towards the reader when pointed at. */
+  .book-tilt {
+    perspective: 1100px;
+  }
+
+  .book-tilt .cover {
+    transition:
+      transform 0.85s var(--ease-premium),
+      box-shadow 0.85s var(--ease-premium);
+    transform-style: preserve-3d;
+  }
+
+  .book-tilt:hover .cover,
+  .book-tilt:focus-within .cover {
+    transform: rotateY(-7deg) rotateX(2deg) scale(1.012);
+    box-shadow: 0 26px 48px -30px rgba(0, 0, 0, 0.34);
+  }
+
+  .cover-paper {
+    background: var(--color-paper);
+    box-shadow: 0 0 0 1px var(--color-rule);
+  }
+
+  .cover-leaf {
+    background: var(--color-leaf);
+    box-shadow: 0 0 0 1px var(--color-rule);
+  }
+
+  .cover-ink {
+    background: var(--color-ink);
+    color: var(--color-paper);
+  }
+
+  /* The sheen that runs across a cover as it tilts. */
+  .cover-sheen {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0;
+    background: linear-gradient(
+      108deg,
+      transparent 34%,
+      rgba(255, 255, 255, 0.5) 50%,
+      transparent 66%
+    );
+    transition: opacity 0.6s var(--ease-premium);
+    mix-blend-mode: soft-light;
+  }
+
+  .cover:hover .cover-sheen {
+    opacity: 1;
+  }
+
+  /* Author bookplate: initials struck into paper, the way a press stamps a
+     flyleaf. No stock photography stands in for a face. */
+  .plate {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: var(--color-leaf);
+    box-shadow: inset 0 0 0 1px var(--color-rule);
+    transition: background-color 0.7s var(--ease-premium);
+  }
+
+  .plate-monogram {
+    font-family: var(--font-display);
+    font-size: clamp(4.5rem, 11vw, 9rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--color-ink);
+    transition:
+      color 0.7s var(--ease-premium),
+      transform 0.9s var(--ease-premium),
+      opacity 0.7s var(--ease-premium);
+  }
+
+  .plate:hover {
+    background-color: var(--color-ink);
+  }
+
+  .plate:hover .plate-monogram {
+    color: var(--color-paper);
+    opacity: 0.14;
+    transform: scale(1.06);
+  }
+
+  .plate-reveal {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.6s var(--ease-premium),
+      transform 0.7s var(--ease-premium);
+  }
+
+  .plate:hover .plate-reveal,
+  .plate:focus-within .plate-reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .plate:focus-within {
+    background-color: var(--color-ink);
+  }
+
+  .plate:focus-within .plate-monogram {
+    color: var(--color-paper);
+    opacity: 0.14;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Rendered prose + the composing field
+   The blog is the first place the site renders text it did not typeset itself.
+   `.prose-house` dresses that Markdown in the same devices the rest of the
+   site uses — the display serif at reading measure, the crease for a rule,
+   quiet underlines — so a member's post sits in the house, not beside it.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .prose-house {
+    font-family: var(--font-display);
+    font-size: clamp(1.125rem, 1.4vw, 1.375rem);
+    line-height: 1.62;
+    max-width: 68ch;
+    color: var(--color-ink);
+  }
+
+  .prose-house > :first-child {
+    margin-top: 0;
+  }
+
+  .prose-house p,
+  .prose-house ul,
+  .prose-house ol,
+  .prose-house blockquote,
+  .prose-house pre,
+  .prose-house table {
+    margin-top: 1.5em;
+  }
+
+  /* Headings step down from the display face and take more air above than
+     below, so a section reads as belonging to the text that follows it. */
+  .prose-house h2 {
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    line-height: 1.1;
+    letter-spacing: -0.016em;
+    margin-top: 1.8em;
+    margin-bottom: 0.1em;
+  }
+
+  .prose-house h3 {
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+    line-height: 1.16;
+    letter-spacing: -0.012em;
+    margin-top: 1.5em;
+    margin-bottom: 0.1em;
+  }
+
+  .prose-house h4 {
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-graphite);
+    margin-top: 1.8em;
+    margin-bottom: 0.4em;
+  }
+
+  /* In-body links carry a quiet standing underline — discoverable in running
+     text in a way the draw-on `.link-rule` is not — and firm up on hover. */
+  .prose-house a {
+    color: var(--color-ink);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-graphite);
+    transition: text-decoration-color 0.45s var(--ease-premium);
+  }
+
+  .prose-house a:hover,
+  .prose-house a:focus-visible {
+    text-decoration-color: var(--color-ink);
+  }
+
+  .prose-house strong {
+    font-weight: 600;
+  }
+
+  .prose-house em {
+    font-style: italic;
+  }
+
+  .prose-house ul,
+  .prose-house ol {
+    padding-left: 1.35em;
+  }
+
+  .prose-house ul {
+    list-style: none;
+  }
+
+  /* A short em-dash marker instead of a filled bullet — quieter, and in ink. */
+  .prose-house ul > li::before {
+    content: "—";
+    position: absolute;
+    left: -1.35em;
+    color: var(--color-graphite);
+  }
+
+  .prose-house ol {
+    list-style: decimal;
+  }
+
+  .prose-house li {
+    position: relative;
+    margin-top: 0.4em;
+  }
+
+  .prose-house li::marker {
+    color: var(--color-graphite);
+  }
+
+  .prose-house blockquote {
+    font-family: var(--font-display);
+    font-style: italic;
+    letter-spacing: -0.012em;
+    color: var(--color-graphite);
+    padding-left: 1.4em;
+    border-left: 1px solid var(--color-rule);
+  }
+
+  .prose-house blockquote p {
+    margin-top: 0.6em;
+  }
+
+  /* A rule inside prose is the same crease used to fold the rest of the site. */
+  .prose-house hr {
+    height: 1px;
+    border: 0;
+    margin: 2.4em 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--color-rule) 9%,
+      var(--color-rule) 91%,
+      transparent 100%
+    );
+  }
+
+  /* Code stays in the sans face — the display serif has no monospace — set
+     small and quiet on a leaf ground. */
+  .prose-house code {
+    font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 0.85em;
+    background: var(--color-leaf);
+    padding: 0.1em 0.35em;
+    border-radius: 2px;
+  }
+
+  .prose-house pre {
+    font-family: ui-monospace, "SF Mono", "Menlo", "Consolas", monospace;
+    font-size: 0.9rem;
+    line-height: 1.65;
+    background: var(--color-leaf);
+    border: 1px solid var(--color-rule);
+    border-radius: 2px;
+    padding: 1.1rem 1.25rem;
+    overflow-x: auto;
+  }
+
+  .prose-house pre code {
+    background: transparent;
+    padding: 0;
+    font-size: inherit;
+  }
+
+  .prose-house img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 2px;
+  }
+
+  .prose-house table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-sans);
+    font-size: 0.9375rem;
+  }
+
+  .prose-house th,
+  .prose-house td {
+    text-align: left;
+    padding: 0.55rem 0.75rem;
+    border-bottom: 1px solid var(--color-rule);
+  }
+
+  .prose-house th {
+    font-weight: 600;
+  }
+
+  /* The composing surface. The bottom-rule `.field` reads badly at textarea
+     height, so the editor gets a full bordered box on leaf, its rule firming
+     up on focus the same way a field's does. */
+  .editor-field {
+    width: 100%;
+    min-height: 22rem;
+    resize: vertical;
+    background: var(--color-leaf);
+    border: 1px solid var(--color-rule);
+    border-radius: 2px;
+    padding: 1.15rem 1.25rem;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--color-ink);
+    transition: border-color 0.45s var(--ease-premium);
+  }
+
+  .editor-field:hover {
+    border-color: var(--color-graphite);
+  }
+
+  .editor-field:focus {
+    outline: none;
+    border-color: var(--color-ink);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Reduced motion
+   Everything below is either removed or shortened to a cross-fade. Motion's
+   own `reducedMotion="user"` handles the JS-driven work.
+   -------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.12s !important;
+  }
+
+  .cover-sheen {
+    display: none;
+  }
+
+  .book-tilt:hover .cover,
+  .book-tilt:focus-within .cover {
+    transform: none;
+  }
+}

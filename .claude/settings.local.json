@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find \"/Users/shriyashsahu/Documents/ScriptLyra Main /src\" -type f -not -path \"*/node_modules/*\" | sort)",
+      "Read(//Users/shriyashsahu/Documents/ScriptLyra Main\\\\ /**)",
+      "Bash(cd \"/Users/shriyashsahu/Documents/ScriptLyra Main \" && ls node_modules | head -100; echo \"---\"; ls node_modules/.bin 2>/dev/null | head -30)",
+      "Bash(rm -rf .next)",
+      "Bash(npx tsc *)",
+      "Bash(node -p \"require\\('@supabase/ssr/package.json'\\).version\")",
+      "Bash(npm run *)",
+      "Bash(rm -f __TRACKED_VAR__/layout.tsx.bak)"
+    ]
+  }
+}
