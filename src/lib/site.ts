@@ -47,10 +47,10 @@ export const footerNav: { heading: string; links: { label: string; href: string 
   {
     heading: "Elsewhere",
     links: [
-      { label: "Instagram", href: "https://instagram.com" },
-      { label: "LinkedIn", href: "https://linkedin.com" },
-      { label: "X", href: "https://x.com" },
-      { label: "YouTube", href: "https://youtube.com" },
+      { label: "Instagram", href: "https://www.instagram.com/script.lyra/" },
+      { label: "LinkedIn", href: "https://www.linkedin.com/in/scriptlyra/" },
+      { label: "X", href: "https://x.com/ScriptLyra" },
+      { label: "YouTube", href: "https://www.youtube.com/@ScriptLyra" },
     ],
   },
 ];
