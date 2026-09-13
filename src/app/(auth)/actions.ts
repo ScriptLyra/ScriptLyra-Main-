@@ -103,6 +103,28 @@ export async function sendMagicLinkAction(_prev: AuthState, formData: FormData):
   return { message: "Check your email for a link to sign in — no password needed." };
 }
 
+export async function signInWithGoogleAction() {
+  const supabase = await createClient();
+  const origin = await requestOrigin();
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+    options: {
+      redirectTo: `${origin}/auth/callback`,
+      queryParams: {
+        access_type: "offline",
+        prompt: "consent",
+      },
+    },
+  });
+
+  if (error || !data.url) {
+    redirect("/signin?error=google");
+  }
+
+  redirect(data.url);
+}
+
 export async function signOutAction() {
   const supabase = await createClient();
   await supabase.auth.signOut();

@@ -400,6 +400,48 @@
     transform: translateX(4px);
   }
 
+  /* ── Google OAuth button ── */
+  .btn-google {
+    color: var(--color-ink);
+    border-color: var(--color-ink);
+    gap: 0.75rem;
+    transition: box-shadow 0.4s var(--ease-premium), color 0.4s var(--ease-premium);
+  }
+  .btn-google::before {
+    display: none; /* skip the ink-fill animation — keep it clean & branded */
+  }
+  .btn-google:hover,
+  .btn-google:focus-visible {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+  }
+  .btn-google-icon {
+    width: 1.125rem;
+    height: 1.125rem;
+    flex-shrink: 0;
+  }
+
+  /* "or" divider between OAuth and credential forms */
+  .auth-divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 1.75rem 0;
+    font-family: var(--font-sans);
+    font-size: 0.8125rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--color-ink);
+    opacity: 0.45;
+  }
+  .auth-divider::before,
+  .auth-divider::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--color-ink);
+    opacity: 0.25;
+  }
+
   /* The ring cursor only exists over the few surfaces that invite handling,
      so the native cursor is hidden there and nowhere else. */
   .has-ring-cursor [data-ring] {
