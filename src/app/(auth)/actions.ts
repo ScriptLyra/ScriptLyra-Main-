@@ -20,9 +20,26 @@ function safeNext(value: FormDataEntryValue | null): string {
 /**
  * The origin this request actually came in on, so a confirmation email points
  * back where the user is — localhost in development, the real host in
- * production — rather than at a baked-in URL. Falls back to the canonical site.
+ * production — rather than at a baked-in URL.
+ *
+ * Priority:
+ *   1. NEXT_PUBLIC_SITE_URL  — explicitly set by us (most reliable)
+ *   2. VERCEL_URL            — auto-set by Vercel on every deployment
+ *   3. origin / host headers — works in local dev
+ *   4. site.url              — absolute last resort
  */
 async function requestOrigin(): Promise<string> {
+  // Explicit site URL takes precedence — guarantees production correctness.
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/+$/, "");
+  }
+
+  // Vercel auto-injects VERCEL_URL (no protocol prefix).
+  if (process.env.VERCEL_URL) {
+    return `https://${process.env.VERCEL_URL}`;
+  }
+
+  // Fall back to the request headers — reliable in local dev.
   const h = await headers();
   const origin = h.get("origin");
   if (origin) return origin;
